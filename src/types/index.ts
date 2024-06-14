@@ -13,6 +13,10 @@ export interface ICard{
   price:number|null;
 }
 
+export interface IModal{
+  content:HTMLElement;
+}
+
 export interface IOrder{
   payment:string;
   total:number;
@@ -37,8 +41,6 @@ export interface IStateApp{
   order:IOrder|null;
   basket:ICard[];
   setCatalog(items: ICard[]): void;
-  (item:ICard): void;
-  (item: ICard): void;
   getResultBasket(): number;
 }
 export interface IValid{
@@ -47,13 +49,14 @@ export interface IValid{
   address:string;
   payment:string;
 }
- 
-export interface ApiResponse {
-  items: ICard[];
+
+export interface IForm{
+  valid: boolean
+  errors: string[];
 }
 
 export interface ISuccessForm{
-  total: number;
+  description: number;
 }
 
 export interface ISuccessfulOrder{
