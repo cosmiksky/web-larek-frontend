@@ -28,6 +28,7 @@ export class Modal extends Component<IModal>{
 
   close() {
     this.container.classList.remove('modal_active')
+    this.content = null
     this.evt.emit('modal:close')
   }
 

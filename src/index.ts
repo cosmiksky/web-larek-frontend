@@ -62,15 +62,22 @@ evt.on('items:changed', () => {
 //open card
 evt.on('card:select',(item: ICard)=>{
     stateData.setCardPreview(item);
+    const isItemInBasket = stateData.basket.some((basketItem) => basketItem.id === item.id);
     const card = new Card('card', cloneTemplate(cardTemplate), {
-        onClick: () => {
-            if(item.selected) {
-                evt.emit('card:delete', item)
-            } else {
-                evt.emit('card:add', item)
-            }
-        }
+        onClick: () => evt.emit('card:add', item)
     })
+    if (isItemInBasket) {
+        if (card.btn) {
+          card.btn.disabled = true  
+          card.setText(card.btn, 'Добавлен в корзину');
+        }
+      }
+    if (item.price === null) {
+        if (card.btn) {
+          card.btn.disabled = true  
+          card.setText(card.btn, 'Нельзя купить');
+        }
+      }
     modal.render({
       content:card.render({
         id:item.id,
@@ -78,8 +85,8 @@ evt.on('card:select',(item: ICard)=>{
         image:item.image,
         description:item.description,
         selected:item.selected,
+        price:item.price,
         category:item.category,
-        price:item.price
       })
     })
 })
@@ -182,4 +189,13 @@ evt.on('contactErr:change', (errors: Partial<IContactForm>) => {
 
 evt.on('orderInput:change',(data:{field:keyof IDeliveryForm; value:string})=>{
     stateData.setOrderInput(data.field,data.value)
+})
+
+//block scroll
+evt.on('modal:open', () => {
+    page.scroll = true
+})
+
+evt.on('modal:close', () => {
+    page.scroll = false
 })
