@@ -121,6 +121,16 @@ evt.on('card:delete', (item: ICard) => {
     stateData.removeFromBasket(item);
     basket.total = stateData.getTotalBasketPrice();
     page.counter = stateData.getCountCardBasket();
+    basket.items = stateData.basket.map((item, index) => {
+        const card = new CardsInBasket('card', cloneTemplate(cardBasketTemplate), {
+            onClick: () => evt.emit('card:delete', item),
+        })
+        return card.render({
+            title: item.title,
+            price: item.price,
+            index: index + 1
+        })
+    })
     if(!stateData.basket.length) {
         basket.disableBtn()
     }
@@ -197,5 +207,7 @@ evt.on('modal:open', () => {
 })
 
 evt.on('modal:close', () => {
-    page.scroll = false
+    page.scroll = false;
+    contact.clear();
+    delivery.clear();
 })
